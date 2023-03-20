@@ -38,7 +38,7 @@ app.get("/", function (req, res) {
 
 // Showing index page
 app.get("/index", isLoggedIn, function (req, res) {
-	res.render("index", {name : req.user.name });
+	res.render("index", {username : req.user.username });
 });
 
 // Showing register form
@@ -49,12 +49,12 @@ app.get("/register", function (req, res) {
 // Handling user signup
 app.post("/register", async (req, res) => {
 	const user = await User.create({
-	name: req.body.name,
+	username: req.body.username,
 	email: req.body.email,
 	password: req.body.password
 	});
 	
-	return res.status(200).json(user);
+	res.render("login")
 });
 
 //Showing login form
