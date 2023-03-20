@@ -10,7 +10,7 @@ var express = require("express"),
 const User = require("./model/User");
 var app = express();
 
-mongoose.connect("mongodb://localhost/27017");
+mongoose.connect("mongodb://127.0.0.1:27017/learners");
 
 app.set("view engine", "ejs");
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -36,9 +36,9 @@ app.get("/", function (req, res) {
 	res.render("home");
 });
 
-// Showing secret page
-app.get("/secret", isLoggedIn, function (req, res) {
-	res.render("secret");
+// Showing index page
+app.get("/index", isLoggedIn, function (req, res) {
+	res.render("index");
 });
 
 // Showing register form
@@ -49,7 +49,7 @@ app.get("/register", function (req, res) {
 // Handling user signup
 app.post("/register", async (req, res) => {
 	const user = await User.create({
-	username: req.body.username,
+	email: req.body.email,
 	password: req.body.password
 	});
 	
@@ -65,12 +65,12 @@ app.get("/login", function (req, res) {
 app.post("/login", async function(req, res){
 	try {
 		// check if the user exists
-		const user = await User.findOne({ username: req.body.username });
+		const user = await User.findOne({ email: req.body.email });
 		if (user) {
 		//check if password matches
 		const result = req.body.password === user.password;
 		if (result) {
-			res.render("secret");
+			res.render("index");
 		} else {
 			res.status(400).json({ error: "password doesn't match" });
 		}
