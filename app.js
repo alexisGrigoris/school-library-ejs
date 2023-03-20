@@ -5,12 +5,14 @@ const express = require("express"),
 	passport = require("passport"),
 	bodyParser = require("body-parser"),
 	LocalStrategy = require("passport-local"),
-	passportLocalMongoose = require("passport-local-mongoose")
-const User = require("./model/User");
-const app = express();
-const methodOverride = require('method-override');
+	passportLocalMongoose = require("passport-local-mongoose"),
+	User = require("./model/User"),
+	app = express(),
+	methodOverride = require('method-override')
+
 
 mongoose.connect("mongodb://127.0.0.1:27017/learners");
+
 
 app.set("view engine", "ejs");
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -38,28 +40,38 @@ app.get("/", function (req, res) {
 
 // Showing index page
 app.get("/index", isLoggedIn, function (req, res) {
-	res.render("index", {username : req.user.username });
+	res.render("index.ejs");
 });
 
 // Showing register form
 app.get("/register", function (req, res) {
-	res.render("register");
+	res.render("register.ejs");
 });
 
 // Handling user signup
 app.post("/register", async (req, res) => {
+	const password = req.body.password
+	const cpassword = req.body.passwordConfirm
 	const user = await User.create({
 	username: req.body.username,
 	email: req.body.email,
-	password: req.body.password
+	password: req.body.password,
+	cpassword: req.body.passwordConfirm
 	});
-	
-	res.render("login")
+	if (password === cpassword){
+
+
+	res.render("login.ejs")}
+	else{
+		res.render('index', function (err, html) {
+			res.send("<p> plz </p>")
+		  })
+	}
 });
 
 //Showing login form
 app.get("/login", function (req, res) {
-	res.render("login");
+	res.render("login.ejs");
 });
 
 //Handling user login
@@ -71,9 +83,9 @@ app.post("/login", async function(req, res){
 		//check if password matches
 		const result = req.body.password === user.password;
 		if (result) {
-			res.render("index");
+			res.render("index.ejs");
 		} else {
-			res.status(400).json({ error: "password doesn't match" });
+			res.render("loginerror.ejs");
 		}
 		} else {
 		res.status(400).json({ error: "User doesn't exist" });
@@ -95,7 +107,7 @@ app.get("/logout", function (req, res) {
 
 function isLoggedIn(req, res, next) {
 	if (req.isAuthenticated()) return next();
-	res.redirect("/login");
+	res.redirect("/login.ejs");
 }
 
 var port = process.env.PORT || 3000;

@@ -117,16 +117,16 @@ button{
         <div class="shape"></div>
         <div class="shape"></div>
     </div>
-    <p id="error-msg"></p>
+    <p id="error-msg"> Wrong password</p>
     <form action="/login" method="POST">
         <div>
             <h1> Login</h1>
-                <label for="email"> Email </label>
-                <input type="email" id="email" name="email"placeholder="Enter your email adress here" required>
+            <label for="email"> Email </label>
+            <input type="email" id="email" name="email" required>
         </div>
         <div>
-                <label for="password"> Password </label>
-                <input type="password" id="password" name="password" placeholder="Enter your password here" required>
+            <label for="password"> Password </label>
+            <input type="password" id="password" name="password" required>
         </div>
         <button type ="submit"> Login</button>
         <a href="/register">Don't have an account? Click here to create one!</a>
