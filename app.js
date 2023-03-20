@@ -1,14 +1,14 @@
 // App.js
 
-var express = require("express"),
+const express = require("express"),
 	mongoose = require("mongoose"),
 	passport = require("passport"),
 	bodyParser = require("body-parser"),
 	LocalStrategy = require("passport-local"),
-	passportLocalMongoose =
-		require("passport-local-mongoose")
+	passportLocalMongoose = require("passport-local-mongoose")
 const User = require("./model/User");
-var app = express();
+const app = express();
+const methodOverride = require('method-override');
 
 mongoose.connect("mongodb://127.0.0.1:27017/learners");
 
@@ -38,7 +38,7 @@ app.get("/", function (req, res) {
 
 // Showing index page
 app.get("/index", isLoggedIn, function (req, res) {
-	res.render("index");
+	res.render("index", {name : req.user.name });
 });
 
 // Showing register form
@@ -49,6 +49,7 @@ app.get("/register", function (req, res) {
 // Handling user signup
 app.post("/register", async (req, res) => {
 	const user = await User.create({
+	name: req.body.name,
 	email: req.body.email,
 	password: req.body.password
 	});
