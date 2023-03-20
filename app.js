@@ -31,9 +31,9 @@ passport.deserializeUser(User.deserializeUser());
 // ROUTES
 //=====================
 
-// Showing home page
+// Showing login page
 app.get("/", function (req, res) {
-	res.render("home");
+	res.render("login");
 });
 
 // Showing index page
